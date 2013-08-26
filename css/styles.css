@@ -23,3 +23,14 @@ h1 { color:#eee; font-size:3em; text-align:center;}
 .OR { background:#ffa033;}
 .RE { background:#ff3333;}
 .YE { background:#ffff33;}
+
+.tower { 
+	border:2px solid;
+	border-radius:30px;
+	height:24px; 
+	margin:10px;
+	width:24px; 
+}
+
+.BK { background:#000; border-color:#333; }
+.WH { background:#fff; border-color:#eee; }

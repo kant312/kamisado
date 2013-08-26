@@ -20,11 +20,28 @@
 		for(var rowIdx in $scope.gridColors) {
 			$scope.grid[rowIdx] = [];
 			for(var tileIdx in $scope.gridColors) {
-				$scope.grid[rowIdx][tileIdx] = {
+				//Create the tile
+				var tile = {
 					color: $scope.gridColors[rowIdx][tileIdx]
 				};
+
+				//Place towers
+				if( rowIdx == 0 ) {
+					tile.tower = 'WH';
+				}
+				else if( rowIdx == 7 ) {
+					tile.tower = 'BK';
+				}
+				else {
+					tile.tower = false;
+				}
+
+				//Save tile
+				$scope.grid[rowIdx][tileIdx] = tile;
 			}
 		}
+
+
 
 		/**
 		 * Select a tile

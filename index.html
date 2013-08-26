@@ -13,7 +13,9 @@
 
 	<div id="grid" data-ng-controller="gridController">
 		<div data-ng-repeat="(rowIdx, row) in grid" class="row">
-			<a href="" data-ng-click="select(rowIdx,tileIdx)" data-ng-repeat="(tileIdx, tile) in row" class="tile {{tile.color}}"></a>
+			<a href="" data-ng-click="select(rowIdx,tileIdx)" data-ng-repeat="(tileIdx, tile) in row" class="tile {{tile.color}}">
+				<div class="tower {{ tile.tower }}" data-ng-show="tile.tower"></div>
+			</a>
 		</div>
 	</div>
 
