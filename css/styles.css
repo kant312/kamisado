@@ -1,0 +1,25 @@
+body { background:#333; margin:0 auto; font:16px/1.5 sans-serif;}
+
+h1 { color:#eee; font-size:3em; text-align:center;}
+
+#grid { margin:2em auto; width:400px; }
+
+.row {
+	overflow:hidden; 
+	width:100%; 
+}
+
+.tile {
+	float:left;
+	height:50px;
+	width:50px;
+}
+
+.BL { background:#3333ff;}
+.BR { background:#552222;}
+.GR { background:#33ff33;}
+.PI { background:#feaafe;}
+.PU { background:#a033a0;}
+.OR { background:#ffa033;}
+.RE { background:#ff3333;}
+.YE { background:#ffff33;}

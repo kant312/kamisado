@@ -9,8 +9,12 @@
 </head>
 <body data-ng-app="kamisado">
 
-	<div id="grid" data-ng-controller="grid">
-		
+	<h1>Kamisado JS</h1>
+
+	<div id="grid" data-ng-controller="gridController">
+		<div data-ng-repeat="(rowIdx, row) in grid" class="row">
+			<a href="" data-ng-click="select(rowIdx,tileIdx)" data-ng-repeat="(tileIdx, tile) in row" class="tile {{tile.color}}"></a>
+		</div>
 	</div>
 
 </body>
