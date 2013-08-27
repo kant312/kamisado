@@ -22,7 +22,8 @@
 			for(var tileIdx in $scope.gridColors) {
 				//Create the tile
 				var tile = {
-					color: $scope.gridColors[rowIdx][tileIdx]
+					color: $scope.gridColors[rowIdx][tileIdx],
+					selected: false
 				};
 
 				//Place towers
@@ -41,7 +42,20 @@
 			}
 		}
 
-
+		/**
+		 * Run all tiles of the grid through a function
+		 *
+		 * @param function fn The function that will transform the tile
+		 *
+		 * @return void
+		 */
+		$scope.processGrid = function(fn) {
+			for(var rowIdx in $scope.grid) {
+				for(var tileIdx in $scope.grid[rowIdx]) {
+					$scope.grid[rowIdx][tileIdx] = fn($scope.grid[rowIdx][tileIdx]);
+				}
+			}
+		};
 
 		/**
 		 * Select a tile
@@ -53,7 +67,20 @@
 		 */
 		$scope.select = function(rowIdx, tileIdx)
 		{
-			console.log('selected ' + rowIdx + ':' + tileIdx);
+			var tile = $scope.grid[rowIdx][tileIdx],
+				tileSelected = tile.selected,
+				tileSelectable = ( tile.tower !== false );
+
+			//Check that the player can select the tile
+			if( tileSelectable ) {
+				//All tiles should be unselected
+				$scope.processGrid(function(tile){
+					tile.selected = false;
+					return tile;
+				});
+
+				$scope.grid[rowIdx][tileIdx].selected = !tileSelected;
+			}
 		};
 
 
