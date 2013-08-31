@@ -40,3 +40,23 @@ h1 { color:#eee; font-size:3em; text-align:center;}
 
 .BK { background:#000; border-color:#333; }
 .WH { background:#fff; border-color:#eee; }
+
+#status {
+	color:#fff;
+	font-weight:bold;
+	font-size:2em;
+	margin:0 auto;
+	padding:2px;
+	text-align:center;
+	width:400px;
+}
+
+#status.White { 
+	background:#eee;
+	color:#333;
+}
+
+#status.Black { 
+	background:#111;
+	color:#eee;
+}

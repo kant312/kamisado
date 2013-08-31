@@ -5,18 +5,29 @@
 	<link rel="stylesheet" type="text/css" href="css/styles.css" media="all" />
 	<script type="text/javascript" src="js/components/angular/angular.js"></script>
 	<script type="text/javascript" src="js/kamisado/kamisado.js"></script>
+	<script type="text/javascript" src="js/kamisado/controllers/game.js"></script>
 	<script type="text/javascript" src="js/kamisado/controllers/grid.js"></script>
 </head>
 <body data-ng-app="kamisado">
 
-	<h1>Kamisado JS</h1>
+	<!-- Game controller -->
+	<div data-ng-controller="gameController" data-ng-init="init()">
 
-	<div id="grid" data-ng-controller="gridController">
-		<div data-ng-repeat="(rowIdx, row) in grid" class="row">
-			<a href="" data-ng-click="select(rowIdx,tileIdx)" data-ng-repeat="(tileIdx, tile) in row" class="tile {{tile.color}} {{ tile.selected && 'selected' || '' }}">
-				<div class="tower {{ tile.tower }}" data-ng-show="tile.tower"></div>
-			</a>
+		<h1>Kamisado JS</h1>
+
+		<!-- Grid controller -->
+		<div id="grid" data-ng-controller="gridController">
+			<div data-ng-repeat="(rowIdx, row) in grid" class="row">
+				<a href="" data-ng-click="select(rowIdx,tileIdx)" data-ng-repeat="(tileIdx, tile) in row" class="tile {{tile.color}} {{ tile.selected && 'selected' || '' }}">
+					<div class="tower {{ tile.tower }}" data-ng-show="tile.tower"></div>
+				</a>
+			</div>
 		</div>
+
+		<div id="status" class="{{ currentPlayer }}">
+			{{ currentPlayer }} is playing.
+		</div>
+
 	</div>
 
 </body>

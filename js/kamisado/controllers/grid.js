@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('kamisado', []).controller('gridController', function($scope){
+	angular.module('kamisado').controller('gridController', function($scope) {
 
 		//Let's define the grid colors
 		$scope.gridColors = [
