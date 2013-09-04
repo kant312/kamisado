@@ -18,6 +18,9 @@
 		//Selected tower
 		$scope.selectedTower = null;
 
+		//Store last move color
+		$scope.lastMoveColor = null;
+
 		//Create the grid
 		$scope.grid = [];
 		for(var rowIdx in $scope.gridColors) {
@@ -120,6 +123,10 @@
 					});
 					$scope.selectedTower = null;
 
+					//Store the tile's color
+					$scope.lastMoveColor = $scope.grid[destination.rowIdx][destination.tileIdx].color;
+					console.log($scope.lastMoveColor);
+
 					//Start next turn
 					playerService.nextTurn();
 				}
@@ -155,6 +162,12 @@
 
 			$scope.processGrid(function(tile){
 				tile.selectable = ( tile.tower === selectableTower );
+
+				//If it's not the first turn, allow only tiles having the same color as the tile where the previous player landed
+				if( $scope.lastMoveColor !== null ) {
+					tile.selectable = ( tile.selectable && tile.color === $scope.lastMoveColor );
+				}
+
 				return tile;
 			});
 		};
