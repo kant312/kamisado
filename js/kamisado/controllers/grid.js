@@ -105,17 +105,25 @@
 			//Check that the player can move a selected tower there
 			if( $scope.selectedTower !== null && tile.tower === false ) {
 				//Move the tower, if we can
-				$scope.updateTile(rowIdx, tileIdx, { tower: $scope.selectedTower.type });
+				var start, destination;
 
-				//Remove the tower from the selected tile and unselect it
-				$scope.updateTile($scope.selectedTower.rowIdx, $scope.selectedTower.tileIdx, { 
-					tower: false,
-					selected: false
-				});
-				$scope.selectedTower = null;
+				start = {rowIdx: $scope.selectedTower.rowIdx, tileIdx: $scope.selectedTower.tileIdx };
+				destination = {rowIdx: rowIdx, tileIdx: tileIdx };
 
-				//Start next turn
-				playerService.nextTurn();
+				if( $scope.isAllowedMove(start, destination) ) {
+					$scope.updateTile(destination.rowIdx, destination.tileIdx, { tower: $scope.selectedTower.type });
+
+					//Remove the tower from the selected tile and unselect it
+					$scope.updateTile(start.rowIdx, start.tileIdx, { 
+						tower: false,
+						selected: false
+					});
+					$scope.selectedTower = null;
+
+					//Start next turn
+					playerService.nextTurn();
+				}
+
 			}
 		};
 
@@ -149,6 +157,91 @@
 				tile.selectable = ( tile.tower === selectableTower );
 				return tile;
 			});
+		};
+
+		/**
+		 * Tell if a specific move is allowed
+		 *
+		 * @param object start Start coordinates
+		 * @param object destination Destination coordinates
+		 *
+		 * @return boolean
+		 */
+		$scope.isAllowedMove = function(start, destination)
+		{
+			var currentPlayer = playerService.getCurrentPlayer(),
+				deltaX = destination.tileIdx - start.tileIdx,
+				deltaY = destination.rowIdx - start.rowIdx,
+				directionAllowed,
+				moveAllowed = false,
+				validMove = false;
+
+
+			//First check if we are moving horizontally
+			if( deltaY === 0 ) {
+				moveAllowed = true;
+			}
+			//If not, we must check if the direction is allowed
+			else {
+				directionAllowed = ( ( currentPlayer === 'Black' && deltaY <= -1 ) || ( currentPlayer === 'White' && deltaY >= 1 ) );
+				if( directionAllowed ) {
+					//Is it vertical?
+					if( deltaX === 0 ) {
+						moveAllowed = true;
+					}
+					//Is it diagonal?
+					else if( Math.abs(deltaX) === Math.abs(deltaY) ) {
+						moveAllowed = true;
+					}
+				}
+			}
+
+			//If the move is allowed, let's do a final check to see if a tower is in the way
+			validMove = moveAllowed && ! $scope.towersInTheWay(start, destination);
+
+			return validMove;
+		};
+
+		/**
+		 * Check a path to see if there are towers in the way
+		 *
+		 * @param object start Start coordinates
+		 * @param object destination Destination coordinates
+		 *
+		 * @return boolean
+		 */
+		$scope.towersInTheWay = function(start, destination)
+		{
+			var path = [],
+				deltaX = destination.tileIdx - start.tileIdx,
+				deltaY = destination.rowIdx - start.rowIdx,
+				xDir = (deltaX > 0) ? 1 : (deltaX < 0) ? -1 : 0,
+				yDir = (deltaY > 0) ? 1 : (deltaY < 0) ? -1 : 0,
+				x = start.tileIdx + xDir,
+				y = start.rowIdx + yDir;
+
+				//Build the path
+				while( x !== destination.tileIdx || y !== destination.rowIdx ) {
+
+					path.push({
+						tileIdx: x,
+						rowIdx: y
+					});
+
+					x += ( x !== destination.tileIdx ) ? xDir : 0;
+					y += ( y !== destination.rowIdx ) ? yDir : 0;
+
+				}
+
+				//Now that we have the path, iterate on each tile to find check for towers
+				for(var idx in path) {
+					var tile = $scope.grid[path[idx].rowIdx][path[idx].tileIdx];
+					if( tile.tower !== false ) {
+						return true;
+					}
+				}
+
+			return false;
 		};
 
 		//Grid ready
