@@ -34,10 +34,10 @@
 
 				//Place towers
 				if( rowIdx == 0 ) {
-					tile.tower = 'WH';
+					tile.tower = {owner: 'WH', color: $scope.gridColors[rowIdx][tileIdx]};
 				}
 				else if( rowIdx == 7 ) {
-					tile.tower = 'BK';
+					tile.tower = {owner: 'BK', color: $scope.gridColors[rowIdx][tileIdx]};
 				}
 				else {
 					tile.tower = false;
@@ -51,7 +51,7 @@
 		//Watch player changes
 		$scope.currentPlayer = playerService.getCurrentPlayer;
 		$scope.$watch('currentPlayer()', function(oldPlayer, newPlayer){
-			$scope.updateGrid(newPlayer);
+			$scope.updateGrid();
 		});
 
 		/**
@@ -62,9 +62,13 @@
 		 * @return void
 		 */
 		$scope.processGrid = function(fn) {
+			var tile;
 			for(var rowIdx in $scope.grid) {
 				for(var tileIdx in $scope.grid[rowIdx]) {
-					$scope.grid[rowIdx][tileIdx] = fn($scope.grid[rowIdx][tileIdx]);
+					tile = $scope.grid[rowIdx][tileIdx];
+					if( typeof tile === 'object' ) {
+						$scope.grid[rowIdx][tileIdx] = fn(tile);
+					}
 				}
 			}
 		};
@@ -101,7 +105,7 @@
 					$scope.selectedTower = {
 						rowIdx: rowIdx,
 						tileIdx: tileIdx,
-						type: tile.tower
+						info: tile.tower
 					};
 				}
 			}
@@ -114,10 +118,10 @@
 				destination = {rowIdx: rowIdx, tileIdx: tileIdx };
 
 				if( $scope.isAllowedMove(start, destination) ) {
-					$scope.updateTile(destination.rowIdx, destination.tileIdx, { tower: $scope.selectedTower.type });
+					$scope.updateTile(destination.rowIdx, destination.tileIdx, { tower: $scope.selectedTower.info });
 
 					//Remove the tower from the selected tile and unselect it
-					$scope.updateTile(start.rowIdx, start.tileIdx, { 
+					$scope.updateTile(start.rowIdx, start.tileIdx, {
 						tower: false,
 						selected: false
 					});
@@ -125,7 +129,6 @@
 
 					//Store the tile's color
 					$scope.lastMoveColor = $scope.grid[destination.rowIdx][destination.tileIdx].color;
-					console.log($scope.lastMoveColor);
 
 					//Start next turn
 					playerService.nextTurn();
@@ -155,17 +158,17 @@
 		 *
 		 * @return void
 		 */
-		$scope.updateGrid = function(player)
+		$scope.updateGrid = function()
 		{
 			var player = playerService.getCurrentPlayer(),
 				selectableTower = (player == 'Black') ? 'BK' : 'WH';
 
 			$scope.processGrid(function(tile){
-				tile.selectable = ( tile.tower === selectableTower );
+				tile.selectable = ( tile.tower !== false && tile.tower.owner === selectableTower );
 
 				//If it's not the first turn, allow only tiles having the same color as the tile where the previous player landed
 				if( $scope.lastMoveColor !== null ) {
-					tile.selectable = ( tile.selectable && tile.color === $scope.lastMoveColor );
+					tile.selectable = ( tile.selectable && tile.tower.color === $scope.lastMoveColor );
 				}
 
 				return tile;

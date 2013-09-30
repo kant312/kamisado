@@ -5,8 +5,8 @@ h1 { color:#eee; font-size:3em; text-align:center;}
 #grid { margin:2em auto; width:400px; }
 
 .row {
-	overflow:hidden; 
-	width:100%; 
+	overflow:hidden;
+	width:100%;
 }
 
 .tile {
@@ -30,12 +30,24 @@ h1 { color:#eee; font-size:3em; text-align:center;}
 .RE { background:#ff3333;}
 .YE { background:#eeee33;}
 
-.tower { 
+.tower {
 	border:2px solid;
 	border-radius:30px;
-	height:24px; 
+	height:24px;
 	margin:10px;
-	width:24px; 
+	position:relative;
+	width:24px;
+}
+
+.tower span {
+	border:none;
+	border-radius:30px;
+	display:block;
+	height:12px;
+	width:12px;
+	position:absolute;
+	top:6px;
+	left:6px;
 }
 
 .BK { background:#000; border-color:#333; }
@@ -51,12 +63,12 @@ h1 { color:#eee; font-size:3em; text-align:center;}
 	width:400px;
 }
 
-#status.White { 
+#status.White {
 	background:#eee;
 	color:#333;
 }
 
-#status.Black { 
+#status.Black {
 	background:#111;
 	color:#eee;
 }
